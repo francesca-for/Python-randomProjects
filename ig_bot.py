@@ -3,19 +3,19 @@
 from selenium import webdriver
 import time
 from datetime import datetime
-from selenium.webdriver.chrome.options import Options   # copiato da fra
+from selenium.webdriver.chrome.options import Options
 
-chrome_path = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'  # copiato da fra
+chrome_path = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 chromedriver_path = '/Users/fornasierarmando/Documents/chromedriver'
 page_URL = 'https://www.instagram.com/accounts/login/'
-WINDOW_SIZE = "1920,1080"                        # copiato da fra
+WINDOW_SIZE = "1920,1080"
 
-chrome_options = webdriver.ChromeOptions()                # copiato da fra
-chrome_options.add_argument("--headless")               # copiato da fra
-chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)    # copiato da fra
-chrome_options.binary_location = chrome_path                   # copiato da fra
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
+chrome_options.binary_location = chrome_path
 
-#browser = webdriver.Chrome(chromedriver_path)
+# browser = webdriver.Chrome(chromedriver_path)    # per debug in caso di errori
 browser = webdriver.Chrome(executable_path=chromedriver_path, options=chrome_options)     # copiato da fra
 
 
@@ -53,7 +53,7 @@ def login(browser, username, password):
             browser.find_element_by_xpath('//*[@id="react-root"]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').send_keys(otpNew+'\n')
             time.sleep(3)
 
-    browser.get('https://www.instagram.com/francesca_fornasier/')  # a volte al primo tentativo torna al login
+    browser.get('https://www.instagram.com/francesca_fornasier/')
     time.sleep(5)
 
 
@@ -79,7 +79,7 @@ def editProfileEveryHour(browser, b1, b2):
         print('Descrizione aggiornata:  '+ str(c_time)+'   |   '+updateName(iterations%3)+'    |    '+str(life_hours))
 
         iterations+=1
-        time.sleep(890)   # aggiorna ogni 15 minuti
+        time.sleep(890)   # update every 15 minutes
 
 
 def editBio(browser, new):
