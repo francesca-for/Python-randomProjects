@@ -69,7 +69,9 @@ def editProfileEveryHour(browser, b1, b2):
         browser.get('https://www.instagram.com/accounts/edit/')
         time.sleep(4)
 
-        newBioWithName = updateName(iterations%3) + '\n' + bio1 + "21  ≈  " + str(life_hours) + " ± 1 ore      :)" + bio2
+        eta = # TO-DO DA IMPLEMENTARE
+
+        newBioWithName = updateName(iterations%3) + '\n' + bio1 + eta + "  ≈  " + str(life_hours) + " ± 1 ore      :)" + bio2
 
         editBio(browser, newBioWithName)
 
