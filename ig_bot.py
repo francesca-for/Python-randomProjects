@@ -86,7 +86,7 @@ def getAge(c_time, birth) :
     age = int(c_time.year) - int(birth.year)
     if c_time.month<birth.month or (c_time.month==birth.month and c_time.day<birth.day) :
         age-=1
-    return str(age)
+    return age
 
 
 def editBio(browser, new_bio):
