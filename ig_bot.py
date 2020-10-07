@@ -15,7 +15,7 @@ chrome_options.add_argument("--headless")
 chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
 chrome_options.binary_location = chrome_path
 
-# browser = webdriver.Chrome(chromedriver_path)    # per debug in caso di errori
+#browser = webdriver.Chrome(chromedriver_path)    # per debug in caso di errori
 browser = webdriver.Chrome(executable_path=chromedriver_path, options=chrome_options)     # copiato da fra
 
 
@@ -44,7 +44,7 @@ def login(browser, username, password):
     if len(found)!=0:
         otp = input('Insert security code: ')
         browser.find_element_by_xpath('//*[@id="react-root"]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').send_keys(otp+'\n')
-        time.sleep(3)
+        time.sleep(5)
 
         # if security code is not correct -> you can try again
         if len(browser.find_elements_by_xpath('//*[@id="twoFactorErrorAlert"]'))!=0 :
@@ -57,8 +57,8 @@ def login(browser, username, password):
     time.sleep(5)
 
 
-def editProfileEveryHour(browser, b1, b2):
-    birth = datetime(1999,5,16,15,30)
+def editProfileEveryNhours(browser, b1, b2):
+    birth = datetime(1999,5,16,17,30)
     iterations = 0
 
     while True :
@@ -69,22 +69,29 @@ def editProfileEveryHour(browser, b1, b2):
         browser.get('https://www.instagram.com/accounts/edit/')
         time.sleep(4)
 
-        newBioWithName = updateName(iterations%3) + '\n' + bio1 + "21  ≈  " + str(life_hours) + " ± 1 ore      :)" + bio2
+        new_bio = updateName(iterations%3) + '\n' + bio1 + str(getAge(c_time, birth)) + "  ≈  " + str(life_hours) + " ± 1 ore      :)" + bio2
 
-        editBio(browser, newBioWithName)
+        editBio(browser, new_bio)
 
         time.sleep(4)
-        browser.find_element_by_xpath('//*[@id="react-root"]/section/main/div/article/form/div[10]/div/div/button').click()   # save
+        browser.find_element_by_xpath('//*[@id="react-root"]/section/main/div/article/form/div[10]/div/div/button').click() # save
 
-        print('Descrizione aggiornata:  '+ str(c_time)+'   |   '+updateName(iterations%3)+'    |    '+str(life_hours))
+        print('Last update:   '+ str(c_time)+'   |   '+updateName(iterations%3)+'    |    '+str(life_hours))
 
         iterations+=1
-        time.sleep(890)   # update every 15 minutes
+        time.sleep(1790)   # update every 30 minutes
 
 
-def editBio(browser, new):
+def getAge(c_time, birth) :
+    age = int(c_time.year) - int(birth.year)
+    if c_time.month<birth.month or (c_time.month==birth.month and c_time.day<birth.day) :
+        age-=1
+    return str(age)
+
+
+def editBio(browser, new_bio):
     browser.find_element_by_xpath('//*[@id="pepBio"]').clear()
-    browser.find_element_by_xpath('//*[@id="pepBio"]').send_keys(new)
+    browser.find_element_by_xpath('//*[@id="pepBio"]').send_keys(new_bio)
 
 
 def updateName(numL):
@@ -106,6 +113,6 @@ time.sleep(2)
 bio1 = "• Torino\n• PoliTo\n• "
 bio2 = "\n________________________________________"
 
-editProfileEveryHour(browser, bio1, bio2)
+editProfileEveryNhours(browser, bio1, bio2)
 
 browser.close()
