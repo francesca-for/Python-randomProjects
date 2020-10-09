@@ -1,5 +1,6 @@
 ##!/usr/bin/env python    # per lanciarlo da terminale
 
+import stdiomask
 from selenium import webdriver
 import time
 from datetime import datetime
@@ -105,7 +106,8 @@ def updateName(numL):
 # MAIN
 
 username = input('Insert username:' )
-password = input('Insert password:' )
+#password = input('Insert password:' )
+password = stdiomask.getpass(prompt = 'Insert password: ')
 
 login(browser, username, password)
 time.sleep(2)
