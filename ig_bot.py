@@ -1,6 +1,9 @@
 ##!/usr/bin/env python    # per lanciarlo da terminale
 
-import stdiomask
+#import stdiomask
+''' a cross-platform Python module for entering passwords to a stdio
+    terminal and displaying a **** mask, which getpass cannot do
+    -> To be istalled with pip    '''
 from selenium import webdriver
 import time
 from datetime import datetime
@@ -16,8 +19,8 @@ chrome_options.add_argument("--headless")
 chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
 chrome_options.binary_location = chrome_path
 
-#browser = webdriver.Chrome(chromedriver_path)    # per debug in caso di errori
-browser = webdriver.Chrome(executable_path=chromedriver_path, options=chrome_options)     # copiato da fra
+browser = webdriver.Chrome(chromedriver_path)    # per debug in caso di errori
+#browser = webdriver.Chrome(executable_path=chromedriver_path, options=chrome_options)
 
 
 # definizione metodi
@@ -29,6 +32,7 @@ def login(browser, username, password):
     try:
         browser.find_element_by_xpath('//*[@id="loginForm"]/div/div[1]/div/label/input').send_keys(username)
         browser.find_element_by_xpath('//*[@id="loginForm"]/div/div[2]/div/label/input').send_keys(password)
+        browser.find_element_by_xpath('/html/body/div[2]/div/div/div/div[2]/button[1]').click()   # accept cookies
         browser.find_element_by_xpath('//*[@id="loginForm"]/div/div[3]').click()
     except NoSuchElementException:
         print("Login failed. Unable to locate Username/Password/LogIn element(s)")
@@ -106,8 +110,8 @@ def updateName(numL):
 # MAIN
 
 username = input('Insert username:' )
-#password = input('Insert password:' )
-password = stdiomask.getpass(prompt = 'Insert password: ')
+password = input('Insert password:' )
+#password = stdiomask.getpass(prompt = 'Insert password: ', mask = '*')     # idk if it's correct
 
 login(browser, username, password)
 time.sleep(2)
