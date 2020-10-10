@@ -27,8 +27,8 @@ browser = webdriver.Chrome(executable_path=chromedriver_path, options=chrome_opt
 # definizione metodi
 
 def login(browser, trial):
-    username = input('Insert username:' )
-    password = input('Insert password:' )
+    username = input('Insert username: ')
+    password = input('Insert password: ')
     #password = stdiomask.getpass(prompt = 'Insert password: ', mask = '*')    # idk if it's correct
 
     browser.get(page_URL)
