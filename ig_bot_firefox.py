@@ -7,20 +7,20 @@
 from selenium import webdriver
 import time
 from datetime import datetime
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.options import Options
 
-chrome_path = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-chromedriver_path = '/Users/fornasierarmando/Documents/chromedriver '
+firefox_path = '/Applications/Firefox.app/Contents/MacOS/Firefox'
+firefoxdriver_path = '/Users/fornasierarmando/Documents/geckodriver'
 page_URL = 'https://www.instagram.com/accounts/login/'
 WINDOW_SIZE = "1920,1080"
 
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
-chrome_options.binary_location = chrome_path
+firefox_options = webdriver.FirefoxOptions()
+firefox_options.add_argument("--headless")
+firefox_options.add_argument("--window-size=%s" % WINDOW_SIZE)
+firefox_options.binary_location = firefox_path
 
-#browser = webdriver.Chrome(chromedriver_path)    # per debug in caso di errori
-browser = webdriver.Chrome(executable_path=chromedriver_path, options=chrome_options)
+#browser = webdriver.Firefox(executable_path=firefoxdriver_path)    # per debug in caso di errori
+browser = webdriver.Firefox(executable_path=firefoxdriver_path, options=firefox_options)
 
 
 
@@ -57,18 +57,19 @@ def twoFactorAuthentication(browser):
     found = browser.find_elements_by_xpath('//*[@id="verificationCodeDescription"]')
     if len(found)!=0:     # two-factor authentication is on
         otp = input('Insert security code: ')
-        browser.find_element_by_xpath('//*[@id="react-root"]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').send_keys(otp+'\n')
-        time.sleep(5)
+        browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').send_keys(otp)
+        browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[2]/button').click()
+        time.sleep(10)
 
         # if security code is not correct
         if len(browser.find_elements_by_xpath('//*[@id="twoFactorErrorAlert"]'))!=0 :
-            browser.find_element_by_xpath('//*[@id="react-root"]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').clear()
+            browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').clear()
             otpNew = input('Security code is not correct.\nInsert security code again: ')
-            browser.find_element_by_xpath('//*[@id="react-root"]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').send_keys(otpNew+'\n')
-            time.sleep(5)
+            browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').send_keys(otpNew+'\n')
+            time.sleep(6)
 
     browser.get('https://www.instagram.com/francesca_fornasier/')
-    time.sleep(5)
+    time.sleep(4)
 
 
 def editProfileEveryNhours(browser, b1, b2):
@@ -83,12 +84,12 @@ def editProfileEveryNhours(browser, b1, b2):
         browser.get('https://www.instagram.com/accounts/edit/')
         time.sleep(4)
 
-        new_bio = updateName(iterations%3) + '\n' + bio1 + str(getAge(c_time, birth)) + "  ≈  " + str(life_hours) + " ± 1 ore      :)" + bio2
+        new_bio = updateName(iterations%3) + '\n' + bio1 + str(getAge(c_time, birth)) + "\t≈\t" + str(life_hours) + " ± 1 ore      :)\n" + bio2
 
         editBio(browser, new_bio)
 
         time.sleep(4)
-        browser.find_element_by_xpath('//*[@id="react-root"]/section/main/div/article/form/div[10]/div/div/button').click() # save
+        browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/form/div[10]/div/div/button').click() # save
 
         print('Last update:   '+ str(c_time)+'   |   '+updateName(iterations%3)+'    |    '+str(life_hours))
 
@@ -116,14 +117,14 @@ def updateName(numL):
 
 
 
-# MAIN
+#*******   MAIN   *******
 
 login(browser, 1)
 twoFactorAuthentication(browser)
 time.sleep(2)
 
-bio1 = "• Torino\n• PoliTo\n• "
-bio2 = "\n________________________________________"
+bio1 = "📍 Torino\n📚 PoliTo\n🔸 "
+bio2 = "👽🎶\n________________________________________"
 
 editProfileEveryNhours(browser, bio1, bio2)
 
