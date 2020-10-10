@@ -27,8 +27,8 @@ browser = webdriver.Firefox(executable_path=firefoxdriver_path, options=firefox_
 # definizione metodi
 
 def login(browser, trial):
-    username = input('Insert username:' )
-    password = input('Insert password:' )
+    username = input('Insert username: ')
+    password = input('Insert password: ')
     #password = stdiomask.getpass(prompt = 'Insert password: ', mask = '*')    # idk if it's correct
 
     browser.get(page_URL)
@@ -124,7 +124,7 @@ twoFactorAuthentication(browser)
 time.sleep(2)
 
 bio1 = "📍 Torino\n📚 PoliTo\n🔸 "
-bio2 = "👽🎶\n________________________________________"
+bio2 = "\n________________________________________"
 
 editProfileEveryNhours(browser, bio1, bio2)
 
