@@ -21,14 +21,13 @@ firefox_options.binary_location = firefox_path
 browser = webdriver.Firefox(executable_path=geckodriver_path, options=firefox_options)
 
 
-
 # definizione metodi
 
 
 def login(browser):
     username = input('Username: ')
     password = input('Password: ')
-    #password = stdiomask.getpass(prompt = 'Insert password: ', mask = '*')    # idk if it's correct
+    #password = stdiomask.getpass(prompt = 'Password: ', mask = '*')    # idk if it's correct
 
     browser.get(page_URL)
     time.sleep(2)
@@ -49,6 +48,26 @@ def login(browser):
     else:
         print("Login successful")
     time.sleep(4)
+
+
+def twoFactorAuthentication(browser):
+    found = browser.find_elements_by_xpath('//*[@id="verificationCodeDescription"]')
+    if len(found)!=0:     # two-factor authentication is on
+        OTP = input('Insert one-time password: ')
+        browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').send_keys(OTP)
+        browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[2]/button').click()
+        time.sleep(5)
+
+        # if OTP is not correct
+        if len(browser.find_elements_by_xpath('//*[@id="twoFactorErrorAlert"]'))!=0 :
+            browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').clear()
+            OTPnew = input('Security code is not correct.\nInsert one-time password again: ')
+            browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').send_keys(OTPnew)
+            browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[2]/button').click()
+            time.sleep(5)
+
+    browser.get('https://www.instagram.com/francesca_fornasier/')
+    time.sleep(5)
 
 
 def editProfileEveryNhours(browser, b1, b2):
