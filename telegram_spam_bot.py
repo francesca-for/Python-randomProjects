@@ -12,15 +12,16 @@ chrome_path = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 chromedriver_path = '/Users/fornasierarmando/Documents/chromedriver'
 telegram_login_page = 'https://web.telegram.org/#/login'
 
-# WINDOW_SIZE = "1920,1080"
-#
-# chrome_options = webdriver.ChromeOptions()
-# chrome_options.add_argument("--headless")
-# chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
-# chrome_options.binary_location = chrome_path
-#
-# browser = webdriver.Chrome(executable_path=chromedriver_path, options=chrome_options)
-browser = webdriver.Chrome(chromedriver_path)
+WINDOW_SIZE = "1920,1080"
+
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
+chrome_options.binary_location = chrome_path
+
+browser = webdriver.Chrome(chromedriver_path)    # per debug in caso di errori
+#browser = webdriver.Chrome(executable_path=chromedriver_path, options=chrome_options)
+
 
 #methods declaration
 def login(browser, p_number) :
@@ -41,7 +42,17 @@ def login(browser, p_number) :
         # GESTIRE CASO DI ERRORE NEL CODICE
 
 
-def spammiamo():
+def getNumMessages():
+    num = input('How many messages do you want to spam? ')
+    if (n>=3600):
+        num = 3599
+    if (n<0):
+        num = 0
+    return num
+
+
+def spammiamo(target, num_msg):
+    print('\nOOK!!')
     # TO-DO to be implemented
 
 
@@ -49,6 +60,9 @@ def spammiamo():
 p_number = input('Insert your phone number to login: ')+'\n'
 login(browser, p_number)
 
-spammiamo()
+target = input('Who is the target? ')
+num_msg = getNumMessages()
+
+spammiamo(target, num_msg)
 
 browser.close()
