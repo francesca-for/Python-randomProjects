@@ -24,9 +24,10 @@ browser = webdriver.Firefox(executable_path=geckodriver_path, options=firefox_op
 
 # definizione metodi
 
-def login(browser, trial):
-    username = input('Insert username: ')
-    password = input('Insert password: ')
+
+def login(browser):
+    username = input('Username: ')
+    password = input('Password: ')
     #password = stdiomask.getpass(prompt = 'Insert password: ', mask = '*')    # idk if it's correct
 
     browser.get(page_URL)
@@ -35,38 +36,18 @@ def login(browser, trial):
     try:
         browser.find_element_by_xpath('//*[@id="loginForm"]/div/div[1]/div/label/input').send_keys(username)
         browser.find_element_by_xpath('//*[@id="loginForm"]/div/div[2]/div/label/input').send_keys(password)
-        if trial==1 :
+        if len(browser.find_elements_by_xpath('/html/body/div[2]/div/div/div/div[1]/h3'))!=0 :
             browser.find_element_by_xpath('/html/body/div[2]/div/div/div/div[2]/button[1]').click()   # accept cookies
         browser.find_element_by_xpath('//*[@id="loginForm"]/div/div[3]').click()
     except NoSuchElementException:
-        print("Login failed. Unable to locate Username/Password/LogIn element(s)")
+        print("Login failed. Unable to locate login element(s)")
 
     time.sleep(2)
     if len(browser.find_elements_by_xpath('//*[@id="slfErrorAlert"]'))!=0 :  # if login is unsuccessful
         print("Login failed. Please, double-check your credentials")
-        login(browser, trial+1)
+        login(browser)
     else:
         print("Login successful")
-    time.sleep(4)
-
-
-
-def twoFactorAuthentication(browser):
-    found = browser.find_elements_by_xpath('//*[@id="verificationCodeDescription"]')
-    if len(found)!=0:     # two-factor authentication is on
-        otp = input('Insert security code: ')
-        browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').send_keys(otp)
-        browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[2]/button').click()
-        time.sleep(10)
-
-        # if security code is not correct
-        if len(browser.find_elements_by_xpath('//*[@id="twoFactorErrorAlert"]'))!=0 :
-            browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').clear()
-            otpNew = input('Security code is not correct.\nInsert security code again: ')
-            browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').send_keys(otpNew+'\n')
-            time.sleep(6)
-
-    browser.get('https://www.instagram.com/francesca_fornasier/')
     time.sleep(4)
 
 
@@ -117,7 +98,7 @@ def updateName(numL):
 
 #*******   MAIN   *******
 
-login(browser, 1)
+login(browser)
 twoFactorAuthentication(browser)
 time.sleep(2)
 
