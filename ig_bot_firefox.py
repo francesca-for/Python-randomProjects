@@ -16,7 +16,7 @@ firefox_options = webdriver.FirefoxOptions()
 firefox_options.add_argument("--headless")
 firefox_options.add_argument("--window-size=%s" % WINDOW_SIZE)
 firefox_options.binary_location = firefox_path
-
+ 
 #browser = webdriver.Firefox(executable_path=geckodriver_path)    # per debug in caso di errori
 browser = webdriver.Firefox(executable_path=geckodriver_path, options=firefox_options)
 
