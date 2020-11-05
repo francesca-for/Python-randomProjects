@@ -50,21 +50,24 @@ def login(browser):
     time.sleep(4)
 
 
-def twoFactorAuthentication(browser):
+def twoFactorAuthentication(browser, first):
     found = browser.find_elements_by_xpath('//*[@id="verificationCodeDescription"]')
     if len(found)!=0:     # two-factor authentication is on
-        OTP = input('Insert one-time password: ')
-        browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').send_keys(OTP)
+        if first==True:
+            otp = input('Enter the security code (type NOcode if you didn\'t get an otp): ')
+        else : otp = input('Enter the security code again: ')
+        if (otp =='NOcode') :
+            browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[3]/button/div').click()
+            otp = input('Enter the security code:')
+        browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').send_keys(otp)
         browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[2]/button').click()
         time.sleep(5)
 
-        # if OTP is not correct
+        # if otp is not correct
         if len(browser.find_elements_by_xpath('//*[@id="twoFactorErrorAlert"]'))!=0 :
             browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').clear()
-            OTPnew = input('Security code is not correct.\nInsert one-time password again: ')
-            browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[1]/div/label/input').send_keys(OTPnew)
-            browser.find_element_by_xpath('/html/body/div[1]/section/main/div/article/div/div[1]/div/form/div[2]/button').click()
-            time.sleep(5)
+            print('Security code is not correct.')
+            twoFactorAuthentication(browser, False)
 
     browser.get('https://www.instagram.com/francesca_fornasier/')
     time.sleep(5)
@@ -118,7 +121,7 @@ def updateName(numL):
 #*******   MAIN   *******
 
 login(browser)
-twoFactorAuthentication(browser)
+twoFactorAuthentication(browser, True)
 time.sleep(2)
 
 bio1 = "📍 Torino\n📚 PoliTo\n🔸 "
